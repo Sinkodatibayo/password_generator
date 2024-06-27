@@ -14,12 +14,12 @@ export default function GenerationOptions() {
         <span className="text-4xl font-semibold">0</span>
       </div>
       <div className="h-24 w-full px-8 flex items-center ">
-        <input
+        {/* <input
           type="range"
           min="1"
           max="12"
           className="w-full accent-slate-800 accent-4"
-        />
+        /> */}
       </div>
 
       <div className="h-24 w-full px-8 flex flex-col items-center capitalize  justify-center my-16">
