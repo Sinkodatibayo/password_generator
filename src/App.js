@@ -1,6 +1,7 @@
 import "./App.css";
 import Generated from "./Components/Generated";
 import GenerationOptions from "./Components/GenerationOptions";
+import { Button } from "@material-tailwind/react";
 
 function App() {
   return (
