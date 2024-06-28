@@ -1,5 +1,6 @@
 import { faChessBishop } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
 
 export default function PassGenerator(passLen, isUpp, isLow, isNum, isSym) {
   const lowCase = "abcdefghijklmnopqrstuvxyz";
@@ -33,4 +34,5 @@ export default function PassGenerator(passLen, isUpp, isLow, isNum, isSym) {
     }
     if (password.length >= passLen) break;
   }
+  password = "";
 }
