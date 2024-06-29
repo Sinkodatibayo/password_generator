@@ -12,7 +12,7 @@ input[type="range"] {
   width: 100%;
 }
 input[type="range"]::-webkit-slider-runnable-track {
-  background: black;
+  background: #0c0c0c75;
   height: 0.7rem;
 }
 /* input[type="range"]::-webkit-slider-runnable-track:active {
@@ -21,10 +21,10 @@ input[type="range"]::-webkit-slider-runnable-track {
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none; /* Override default look */
   appearance: none;
-  margin-top: -14px; /* Centers thumb on the track */
-  background-color: black;
-  height: 2.5rem;
-  width: 2.5rem;
-  border: 4px solid white;
+  margin-top: -12px; /* Centers thumb on the track */
+  background-color: #0c0c0ca2;
+  height: 2rem;
+  width: 2rem;
+  border: 3px solid white;
   border-radius: 1.25rem;
 }

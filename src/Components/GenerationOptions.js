@@ -5,7 +5,37 @@ import Generated from "./Generated";
 
 export default function GenerationOptions() {
   const [password, setPassword] = useState("");
-  const [strengthOfPass, setStrenthOfPass] = useState("");
+  const [strength, setStrength] = useState({
+    label: "Very Weak",
+    color: "darkred",
+  });
+
+  function evaluatePasswordStrength(password) {
+    let score = 0;
+    if (password.length >= 8) score++;
+    if (/[A-Z]/.test(password)) score++;
+    if (/[a-z]/.test(password)) score++;
+    if (/[0-9]/.test(password)) score++;
+    if (/[^A-Za-z0-9]/.test(password)) score++;
+
+    return score;
+  }
+
+  function getStrengthLabel(score) {
+    switch (score) {
+      case 5:
+        return { label: "Very Strong", color: "green" };
+      case 4:
+        return { label: "Strong", color: "blue" };
+      case 3:
+        return { label: "Medium", color: "yellow" };
+      case 2:
+      case 1:
+        return { label: "Weak", color: "red" };
+      default:
+        return { label: "Very Weak", color: "darkred" };
+    }
+  }
 
   function PassGenerator(passLen, isUpp, isLow, isNum, isSym) {
     const lowCase = "abcdefghijklmnopqrstuvxyz";
@@ -40,18 +70,8 @@ export default function GenerationOptions() {
       if (tempPassword.length >= passLen) break;
     }
     setPassword(tempPassword);
-  }
-
-  // CHECK IS STRONG?
-  function passwordStrength(password) {
-    let score = 0;
-    if (password.length >= 12) score++;
-    if (/[A-Z]/.test(password)) score++;
-    if (/[a-z]/.test(password)) score++;
-    if (/[0-9]/.test(password)) score++;
-    if (/[^A-Za-z0-9]/.test(password)) score++;
-
-    return score;
+    const score = evaluatePasswordStrength(tempPassword);
+    setStrength(getStrengthLabel(score));
   }
 
   const [place, setPlace] = useState({
@@ -65,9 +85,8 @@ export default function GenerationOptions() {
   return (
     <>
       <Generated password={password} />
-
-      <div className="bg-slate-700 xl:w-1/3  lg:h-3/5  flex flex-col my-4 md:w-2/3 md:h-3/5 py-4 text-slate-300 ">
-        <div className="flex items-center justify-between  w-full h-24 p-6  items-self-center px-8 text-xl py-4">
+      <div className="bg-slate-700 xl:w-1/3 lg:h-3/5 flex flex-col my-4 md:w-2/3 md:h-3/5 py-4 text-slate-300">
+        <div className="flex items-center justify-between w-full h-24 p-6 px-8 text-xl py-4">
           <span className="text-2xl font-semibold">Character Length</span>
           <span className="text-4xl font-semibold">{place.length}</span>
         </div>
@@ -87,7 +106,7 @@ export default function GenerationOptions() {
               onChange={(e) =>
                 setPlace({ ...place, uppercaseLetter: e.target.checked })
               }
-              className="mr-4  w-6 h-6 accent-white"
+              className="mr-4 w-6 h-6 accent-white"
             />
             <p className="text-xl font-semibold">Include uppercase letters</p>
           </div>
@@ -97,7 +116,7 @@ export default function GenerationOptions() {
               onChange={(e) =>
                 setPlace({ ...place, lowercaseLetter: e.target.checked })
               }
-              className="mr-4  w-6 h-6 accent-white"
+              className="mr-4 w-6 h-6 accent-white"
             />
             <p className="text-xl font-semibold">Include lowercase letters</p>
           </div>
@@ -107,7 +126,7 @@ export default function GenerationOptions() {
               onChange={(e) =>
                 setPlace({ ...place, numbers: e.target.checked })
               }
-              className="mr-4  w-6 h-6 accent-white"
+              className="mr-4 w-6 h-6 accent-white"
             />
             <p className="text-xl font-semibold">Include numbers</p>
           </div>
@@ -117,35 +136,76 @@ export default function GenerationOptions() {
               onChange={(e) =>
                 setPlace({ ...place, Symbols: e.target.checked })
               }
-              className="mr-4  w-6 h-6 accent-white"
+              className="mr-4 w-6 h-6 accent-white"
             />
             <p className="text-xl font-semibold">Include symbols</p>
           </div>
         </div>
-        <div className="h-20 flex items-center px-4 mx-8 my-4 justify-between bg-slate-900">
+        <div className="h-20 flex items-center px-4 mx-8 my-4 justify-between bg-slate-800">
           <p className="font-bold text-2xl tracking-wider uppercase">
             Strength
           </p>
           <div className="flex gap-2 items-center">
-            <span className={"font-medium text-2xl text-white"}>
-              {passwordStrength(password) === 5
-                ? "Exellent"
-                : passwordStrength(password) === 4
-                ? "Very Good"
-                : passwordStrength(password) === 3
-                ? "Good"
-                : passwordStrength(password) === 2
-                ? "Weak"
-                : passwordStrength(password) === 1
-                ? "Very Weak"
-                : ""}
+            <span
+              className="font-medium text-2xl mr-2"
+              style={{ color: strength.color }}
+            >
+              {strength.label}
             </span>
-
             <div className="h-full flex items-center justify-center">
-              <div className="border-2 border-white w-4 h-10 mr-2 "></div>
-              <div className="border-2 border-white w-4 h-10 mr-2 "></div>
-              <div className="border-2 border-white w-4 h-10 mr-2"></div>
-              <div className="border-2 border-white w-4 h-10"></div>
+              <div
+                className={`border-none border-white w-4 h-10 mr-2 ml-2 ${
+                  strength.color === "green" ? "bg-green-500 border-none" : ""
+                }`}
+              ></div>
+              <div
+                className={`border-none border-white w-4 h-10 mr-2 ${
+                  strength.color === "blue"
+                    ? "bg-blue-500 border-none"
+                    : strength.color === "green"
+                    ? "bg-green-500 border-none"
+                    : ""
+                }`}
+              ></div>
+              <div
+                className={`border-none border-white w-4 h-10 mr-2 ${
+                  strength.color === "yellow"
+                    ? "bg-yellow-400 border-none"
+                    : strength.color === "blue"
+                    ? "bg-blue-500 border-none"
+                    : strength.color === "green"
+                    ? "bg-green-500 border-none"
+                    : ""
+                }`}
+              ></div>
+              <div
+                className={`border-none border-white w-4 h-10  ${
+                  strength.color === "red"
+                    ? "bg-red-500 border-none"
+                    : strength.color === "yellow"
+                    ? "bg-yellow-400 border-none"
+                    : strength.color === "blue"
+                    ? "bg-blue-500 border-none"
+                    : strength.color === "green"
+                    ? "bg-green-500 border-none"
+                    : ""
+                }`}
+              ></div>
+              <div
+                className={`border-none w-4 h-10  ml-2 ${
+                  strength.color === "red"
+                    ? "bg-red-500 border-none"
+                    : strength.color === "yellow"
+                    ? "bg-yellow-400 border-none"
+                    : strength.color === "blue"
+                    ? "bg-blue-500 border-none"
+                    : strength.color === "green"
+                    ? "bg-green-500 border-none"
+                    : strength.color === "darkred"
+                    ? "bg-red-900 border-none"
+                    : "border-none w-4 h-10 bg-red-900 "
+                }`}
+              ></div>
             </div>
           </div>
         </div>
