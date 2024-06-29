@@ -5,6 +5,7 @@ import Generated from "./Generated";
 
 export default function GenerationOptions() {
   const [password, setPassword] = useState("");
+  const [strengthOfPass, setStrenthOfPass] = useState("");
 
   function PassGenerator(passLen, isUpp, isLow, isNum, isSym) {
     const lowCase = "abcdefghijklmnopqrstuvxyz";
@@ -41,6 +42,18 @@ export default function GenerationOptions() {
     setPassword(tempPassword);
   }
 
+  // CHECK IS STRONG?
+  function passwordStrength(password) {
+    let score = 0;
+    if (password.length >= 12) score++;
+    if (/[A-Z]/.test(password)) score++;
+    if (/[a-z]/.test(password)) score++;
+    if (/[0-9]/.test(password)) score++;
+    if (/[^A-Za-z0-9]/.test(password)) score++;
+
+    return score;
+  }
+
   const [place, setPlace] = useState({
     length: "8",
     uppercaseLetter: false,
@@ -51,7 +64,7 @@ export default function GenerationOptions() {
 
   return (
     <>
-        <Generated password={password} />
+      <Generated password={password} />
 
       <div className="bg-slate-700 xl:w-1/3  lg:h-3/5  flex flex-col my-4 md:w-2/3 md:h-3/5 py-4 text-slate-300 ">
         <div className="flex items-center justify-between  w-full h-24 p-6  items-self-center px-8 text-xl py-4">
@@ -71,7 +84,9 @@ export default function GenerationOptions() {
           <div className="w-full my-4 flex">
             <input
               type="checkbox"
-              onChange={(e) => setPlace({ ...place, uppercaseLetter: e.target.checked })}
+              onChange={(e) =>
+                setPlace({ ...place, uppercaseLetter: e.target.checked })
+              }
               className="mr-4  w-6 h-6 accent-white"
             />
             <p className="text-xl font-semibold">Include uppercase letters</p>
@@ -79,7 +94,9 @@ export default function GenerationOptions() {
           <div className="w-full my-4 flex">
             <input
               type="checkbox"
-              onChange={(e) => setPlace({ ...place, lowercaseLetter: e.target.checked })}
+              onChange={(e) =>
+                setPlace({ ...place, lowercaseLetter: e.target.checked })
+              }
               className="mr-4  w-6 h-6 accent-white"
             />
             <p className="text-xl font-semibold">Include lowercase letters</p>
@@ -87,7 +104,9 @@ export default function GenerationOptions() {
           <div className="w-full my-4 flex">
             <input
               type="checkbox"
-              onChange={(e) => setPlace({ ...place, numbers: e.target.checked })}
+              onChange={(e) =>
+                setPlace({ ...place, numbers: e.target.checked })
+              }
               className="mr-4  w-6 h-6 accent-white"
             />
             <p className="text-xl font-semibold">Include numbers</p>
@@ -95,33 +114,52 @@ export default function GenerationOptions() {
           <div className="w-full my-4 flex">
             <input
               type="checkbox"
-              onChange={(e) => setPlace({ ...place, Symbols: e.target.checked })}
+              onChange={(e) =>
+                setPlace({ ...place, Symbols: e.target.checked })
+              }
               className="mr-4  w-6 h-6 accent-white"
             />
             <p className="text-xl font-semibold">Include symbols</p>
           </div>
         </div>
         <div className="h-20 flex items-center px-4 mx-8 my-4 justify-between bg-slate-900">
-          <p className="font-bold text-2xl tracking-wider uppercase">Strength</p>
+          <p className="font-bold text-2xl tracking-wider uppercase">
+            Strength
+          </p>
           <div className="flex gap-2 items-center">
-            <span className="font-medium text-2xl text-orange-500">Medium</span>
+            <span className={"font-medium text-2xl text-white"}>
+              {passwordStrength(password) === 5
+                ? "Exellent"
+                : passwordStrength(password) === 4
+                ? "Very Good"
+                : passwordStrength(password) === 3
+                ? "Good"
+                : passwordStrength(password) === 2
+                ? "Weak"
+                : passwordStrength(password) === 1
+                ? "Very Weak"
+                : ""}
+            </span>
+
             <div className="h-full flex items-center justify-center">
-              <div className="border-4 border-white w-4 h-10 mr-2 bg-white"></div>
-              <div className="border-4 border-white w-4 h-10 mr-2 bg-white"></div>
-              <div className="border-4 border-white w-4 h-10 mr-2"></div>
-              <div className="border-4 border-white w-4 h-10"></div>
+              <div className="border-2 border-white w-4 h-10 mr-2 "></div>
+              <div className="border-2 border-white w-4 h-10 mr-2 "></div>
+              <div className="border-2 border-white w-4 h-10 mr-2"></div>
+              <div className="border-2 border-white w-4 h-10"></div>
             </div>
           </div>
         </div>
         <div
           className="text-center flex items-center justify-center bg-white text-black h-20 mx-8 cursor-pointer"
-          onClick={() => PassGenerator(
-            place.length,
-            place.uppercaseLetter,
-            place.lowercaseLetter,
-            place.numbers,
-            place.Symbols
-          )}
+          onClick={() =>
+            PassGenerator(
+              place.length,
+              place.uppercaseLetter,
+              place.lowercaseLetter,
+              place.numbers,
+              place.Symbols
+            )
+          }
         >
           <p className="pr-4 text-2xl font-bold uppercase">Generate</p>
           <FontAwesomeIcon icon={faArrowRight} />
